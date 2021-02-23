@@ -16,6 +16,16 @@ public class HUD: UILayer
     {
         print("Showing HUD");
     }
+    
+    public override void OnScreenUpAndReady()
+    {
+        print("HUD coroutines available");
+    }
+    
+    public override void OnScreenDown()
+    {
+        print("HUD hidden");
+    }
 }
 
 
@@ -25,13 +35,18 @@ public class GameManager: MonoBehaviour
     //but there can also be multiple of these to handle different branches of the UI if necessary
     public UIHandler gameUI;
 
-    private void Start()
+    private IEnumerator Start()
     {
         gameUI.Initialize(); 
         //Outputs "HUD Initialized" as long as the HUD component is a child
         //from the UIHandler Game Object hierarchy
         
         gameUI.Show<HUD>(); //Outputs "Showing HUD"
+        yield return null;
+        //"HUD coroutines available" is outputed at this time
+        yield return null;
+        
+        gameUI.Hide(); //Outputs "HUD hidden" since HUD is the UILayer on top of the stack
     }
 }
 ```
